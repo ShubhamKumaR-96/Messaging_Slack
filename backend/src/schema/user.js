@@ -1,3 +1,4 @@
+import bcrypt from 'bcrypt';
 import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema(
@@ -9,6 +10,7 @@ const userSchema = new mongoose.Schema(
       lowercase: true,
       trim: true,
       match: [
+        /* eslint-disable-next-line no-useless-escape */
         /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
         'Please enter a valid email'
       ]
@@ -22,6 +24,7 @@ const userSchema = new mongoose.Schema(
       required: [true, 'username is required'],
       unique: [true, 'username already exits'],
       match: [
+         
         /^[a-zA-Z0-9_]{3,20}$/,
         'Username must characters and contain letters, numbers'
       ]
@@ -34,8 +37,11 @@ const userSchema = new mongoose.Schema(
 );
 
 userSchema.pre('save', function (next) {
+  const salt = bcrypt.genSaltSync(5);
+  const hashedPassword = bcrypt.hashSync(this.password, salt);
+  this.password = hashedPassword;
   if (!this.avatar) {
-    this.avatar = `https://robohosh.org/${user.username}`;
+    this.avatar = `https://robohash.org/${this.username}`;
   }
   next();
 });
