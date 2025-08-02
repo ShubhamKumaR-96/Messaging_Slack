@@ -27,10 +27,10 @@ const workspaceSchema=new mongoose.Schema({
         type:String,
         required:[true, 'join code required']
     },
-    channels:{
+    channels:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Channel"
-    }
+    }]
 })
 
 export const Workspace=mongoose.model("Workspace",workspaceSchema)
