@@ -21,7 +21,7 @@ export const signupService = async (data) => {
         'A user with same email already exists'
       );
     }
-    throw error; // Important: rethrow unhandled errors
+    throw error;
   }
 };
 
